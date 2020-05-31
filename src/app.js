@@ -27,7 +27,7 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 if (mode === 'dev') {
-  app.use('/static', express.static('static'));
+  app.use('/static', express.static('static', { maxAge: 0 }));
 }
 if (mode === 'prod') {
   app.use('/static', express.static('dist'));
