@@ -37,7 +37,14 @@ app.set('view engine', 'ejs');
 const index = require('./routes/index');
 app.use('/', index);
 
+if (mode === 'prod') {
+  https.createServer(
+      { key: getConfig('app.key'), cert: getConfig('app.fullchain') }, app);
+}
 
-https.createServer({ key: getConfig('app.key'), cert: getConfig('app.fullchain') }, app);
+if (mode === 'dev') {
+  https.createServer(
+      { key: getConfig('app.localKey'), cert: getConfig('app.localFullChain') }, app);
+}
 
 app.listen(PORT);
