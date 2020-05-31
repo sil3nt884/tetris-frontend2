@@ -7,6 +7,7 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const mode = process.env.mode || 'dev';
 const https = require('https');
+const fs = require('fs');
 
 global.environment = mode;
 
@@ -39,12 +40,13 @@ app.use('/', index);
 
 if (mode === 'prod') {
   https.createServer(
-      { key: getConfig('app.key'), cert: getConfig('app.fullchain') }, app);
+      { key: fs.readFileSync(getConfig('app.key')), cert: getConfig('app.fullchain') }, app);
 }
 
 if (mode === 'dev') {
+  console.log('starting dev env')
   https.createServer(
-      { key: getConfig('app.localKey'), cert: getConfig('app.localFullChain') }, app);
+      { key: fs.readFileSync(getConfig('app.localKey')), cert: fs.readFileSync(getConfig('app.localFullChain')) }, app);
 }
 
 app.listen(PORT);
