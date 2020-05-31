@@ -1,11 +1,12 @@
 const express = require('express');
 const app = express();
-const config = require('./config');
-const PORT = config.app.frontendPort;
+const getConfig = require('./config');
+const PORT = getConfig('app.frontendPort');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const mode = process.env.mode || 'dev';
+const https = require('https');
 
 global.environment = mode;
 
@@ -36,5 +37,7 @@ app.set('view engine', 'ejs');
 const index = require('./routes/index');
 app.use('/', index);
 
+
+https.createServer({ key: getConfig('app.key'), cert: getConfig('app.fullchain') }, app);
 
 app.listen(PORT);

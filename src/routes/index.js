@@ -5,7 +5,6 @@ const menu = (req, res) => {
   if (evn === 'prod') {
     res.render('index', { port: config.app.backendPort, env: 'bundle.js' });
   }
-
   if (evn === 'dev') {
     res.render('index', { port: config.app.backendPort, env: 'index.js' });
   }

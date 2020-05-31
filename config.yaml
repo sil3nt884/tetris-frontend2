@@ -1,3 +1,5 @@
 app:
   backendPort: 8000
   frontendPort: 8001
+  key: "/etc/letsencrypt/live/points884.com/privkey.pem"
+  fullchain: "'/etc/letsencrypt/live/points884.com/fullchain.pem'"
