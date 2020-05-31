@@ -1,10 +1,13 @@
 const express = require('express');
 const app = express();
-const PORT = 8001;
-const path = require('path');
+const config = require('./config');
+const PORT = config.app.frontendPort;
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
+const mode = process.env.mode || 'dev';
+
+global.environment = mode;
 
 app.use(logger((tokens, req, res)=>{
   return JSON.stringify( {
@@ -19,13 +22,16 @@ app.use(logger((tokens, req, res)=>{
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'html')));
-app.use(express.static(path.join(__dirname, '/var/www/html/admim')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-app.use('/static', express.static('static'));
+if (mode === 'dev') {
+  app.use('/static', express.static('static'));
+}
+if (mode === 'prod') {
+  app.use('/static', express.static('dist'));
+}
 app.set('view engine', 'ejs');
+
 
 const index = require('./routes/index');
 app.use('/', index);

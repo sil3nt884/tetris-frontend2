@@ -1,6 +1,14 @@
+const evn = global.environment;
+const config = require('../config');
 
 const menu = (req, res) => {
-  res.render('index', { port: 8000 });
+  if (evn === 'prod') {
+    res.render('index', { port: config.app.backendPort, env: 'bundle.js' });
+  }
+
+  if (evn === 'dev') {
+    res.render('index', { port: config.app.backendPort, env: 'index.js' });
+  }
 };
 
 module.exports = menu;
