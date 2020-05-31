@@ -22,5 +22,6 @@ module.exports = {
     'semi': ['error', 'always'],
     'quotes': ['error', 'single'],
     'require-jsdoc': 0,
+    'new-cap': 0,
   },
 };
