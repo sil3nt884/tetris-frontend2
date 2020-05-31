@@ -16,15 +16,19 @@ const awaitingForSecondPlayer = async () => {
 const startSingleplayerGame = () => {
   const connection = document.getElementById('connection');
   connection.style.display = 'none';
+
   const score = document.createElement('div');
   score.id = 'score';
+
   const canvas = document.createElement('canvas');
   canvas.id = 'tetris';
-  canvas.style.width= '50%';
-  canvas.style.height = '90vh';
+  canvas.width = '240';
+  canvas.height = '360';
+
   const gameScript = document.createElement('script');
   gameScript.src = './static/game.js';
   gameScript.type = 'module';
+
   document.body.append(score, canvas, gameScript);
 };
 
