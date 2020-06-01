@@ -3,7 +3,7 @@ import { default as config } from './config.js';
 
 const promiseTimeout = () => {
   return new Promise((resolve) => {
-    setTimeout(()=> {
+    setTimeout(() => {
       resolve({});
     }, config.timeout);
   });
