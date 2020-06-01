@@ -1,10 +1,11 @@
 import { GET, POST } from './utils.js';
 const PORT = window.gameConfig.backendPort;
+const config = window.gameConfig;
 
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 
-GET(`https://localhost:${PORT}/connect`);
+GET(`${config.baseURL}:${PORT}/connect`);
 
 context.scale(20, 20);
 
@@ -180,9 +181,9 @@ function rotate(matrix, direction) {
         matrix[x][y],
         matrix[y][x],
       ] = [
-          matrix[y][x],
-          matrix[x][y],
-        ];
+        matrix[y][x],
+        matrix[x][y],
+      ];
     }
   }
 
@@ -239,7 +240,7 @@ async function update(time = 0) {
   dropCounter += deltaTime;
   if (dropCounter > dropInterval) {
     playerDrop();
-    POST(`https://localhost:${PORT}/data`, player).catch(console.log);
+    POST(`${config.baseURL}:${PORT}/data`, player).catch(console.log);
   }
   lastTime = time;
 
