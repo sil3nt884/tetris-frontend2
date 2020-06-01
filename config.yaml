@@ -5,3 +5,4 @@ app:
   fullchain: "/etc/letsencrypt/live/points884.com/fullchain.pem"
   localKey: "cert/server.key"
   localFullChain: "cert/server.cert"
+  mulitiPlayerTimeout: 30000
