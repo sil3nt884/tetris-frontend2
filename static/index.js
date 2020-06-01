@@ -9,7 +9,7 @@ const promiseTimeout = () => {
 };
 
 const awaitingForSecondPlayer = async () => {
-  return await GET(`https://localhost:${config.backendPort}/players`);
+  return await GET(`${config.baseURL}:${config.backendPort}/players`);
 };
 
 const startSingleplayerGame = () => {
@@ -80,14 +80,35 @@ const startMuliplayerGame = () => {
   document.body.append(gameScript);
 };
 
+let count = 1;
+const delay = (ms) => {
+  return new Promise((resolve) => {
+    setTimeout(()=> {
+      resolve();
+    }, ms);
+  });
+};
+let singlePlayer = false;
+const pollForPlayers = async () => {
+  while (!await awaitingForSecondPlayer()) {
+    await delay(1000);
+    count++;
+    if (count >= 8) {
+      singlePlayer = true;
+      break;
+    }
+  }
+};
+
+
 const start = async () => {
-  const connected = await GET(`https://localhost:${config.backendPort}/connect`);
+  const connected = await GET(`${config.baseURL}:${config.backendPort}/connect`);
   if (connected) {
-    const raceResult = await Promise.race([awaitingForSecondPlayer(), promiseTimeout()]);
-    if (!Object.keys(raceResult).length > 0) {
-      startSingleplayerGame();
-    } else {
+    await pollForPlayers();
+    if (!singlePlayer) {
       startMuliplayerGame();
+    } else {
+      startSingleplayerGame();
     }
   }
 };
