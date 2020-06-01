@@ -1,10 +1,10 @@
 import { GET, POST } from './utils.js';
-import { default as config } from './config.js';
+const PORT = window.gameConfig.backendPort;
 
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 
-GET(`https://localhost:${config.PORT}/connect`);
+const clientId = async () => await GET(`https://localhost:${PORT}/connect`);
 
 context.scale(20, 20);
 
@@ -139,6 +139,7 @@ function drawMatrix(matrix, offset) {
 }
 
 const player = {
+  id: clientId,
   position: { x: 0, y: 0 },
   matrix: null,
   score: 0,
@@ -239,7 +240,13 @@ async function update(time = 0) {
   dropCounter += deltaTime;
   if (dropCounter > dropInterval) {
     playerDrop();
-    POST(`https://localhost:${config.PORT}/data`, player).catch(console.log);
+
+    // Send player object to server
+    POST(`https://localhost:${PORT}/data`, player).catch(console.log);
+
+    // Request other player's object from server
+    const otherPlayerObject = GET(`http://localhost:${PORT}/get-data`);
+    console.log(` OTHER PLAYER OBJECT: |${otherPlayerObject}|`);
   }
   lastTime = time;
 

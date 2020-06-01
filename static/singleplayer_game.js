@@ -1,10 +1,10 @@
 import { GET, POST } from './utils.js';
-import { default as config } from './config.js';
+const PORT = window.gameConfig.backendPort;
 
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 
-GET(`https://localhost:${config.PORT}/connect`);
+GET(`https://localhost:${PORT}/connect`);
 
 context.scale(20, 20);
 
@@ -239,7 +239,7 @@ async function update(time = 0) {
   dropCounter += deltaTime;
   if (dropCounter > dropInterval) {
     playerDrop();
-    POST(`https://localhost:${config.PORT}/data`, player).catch(console.log);
+    POST(`https://localhost:${PORT}/data`, player).catch(console.log);
   }
   lastTime = time;
 
