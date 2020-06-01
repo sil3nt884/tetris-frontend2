@@ -1,16 +1,15 @@
 import { GET } from './utils.js';
-import { default as config } from './config.js';
-
+const config = window.gameConfig;
 const promiseTimeout = () => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({});
-    }, config.timeout);
+    }, config.mulitiPlayerTimeout);
   });
 };
 
 const awaitingForSecondPlayer = async () => {
-  return await GET(`https://localhost:${config.PORT}/players`);
+  return await GET(`https://localhost:${config.backendPort}/players`);
 };
 
 const startSingleplayerGame = () => {
@@ -82,7 +81,7 @@ const startMuliplayerGame = () => {
 };
 
 const start = async () => {
-  const connected = await GET(`https://localhost:${config.PORT}/connect`);
+  const connected = await GET(`https://localhost:${config.backendPort}/connect`);
   if (connected) {
     const raceResult = await Promise.race([awaitingForSecondPlayer(), promiseTimeout()]);
     if (!Object.keys(raceResult).length > 0) {
