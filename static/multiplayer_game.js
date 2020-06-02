@@ -162,18 +162,13 @@ function init() {
     });
   }
 
-  const player = {
-    id: clientId,
-    position: { x: 0, y: 0 },
-    matrix: null,
-    score: 0,
-  };
-
   function draw() {
     player1Context.fillStyle = '#000';
-    player1Context.fillRect(0, 0, canvas.width, canvas.height);
-    drawMatrix(arena, { x: 0, y: 0 });
-    drawMatrix(player.matrix, player.position);
+    player1Context.fillRect(0, 0, player1Canvas.width, player1Canvas.height);
+    drawMatrix(player1Arena, { x: 0, y: 0 });
+    drawMatrix(player1.matrix, player1.position);
+    drawMatrix(player2Arena, { x: 0, y: 0 });
+    drawMatrix(player2.matrix, player2.position);
   }
 
   function merge(arena, player) {
