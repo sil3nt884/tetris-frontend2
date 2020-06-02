@@ -1,16 +1,5 @@
 import { GET } from './utils.js';
 const config = window.gameConfig;
-const promiseTimeout = () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({});
-    }, config.mulitiPlayerTimeout);
-  });
-};
-
-const awaitingForSecondPlayer = async () => {
-  return await GET(`${config.baseURL}:${config.backendPort}/players`);
-};
 
 const startSingleplayerGame = () => {
   const connection = document.getElementById('connection');
