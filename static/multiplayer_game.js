@@ -3,12 +3,37 @@ const PORT = window.gameConfig.backendPort;
 const config = window.gameConfig;
 
 function init() {
-  const canvas = document.getElementById('player1-tetris');
-  const player1Context = canvas.getContext('2d');
+  const player1Canvas = document.getElementById('player1-tetris');
+  const player1Score = document.getElementById('player1-score');
+  const player1Context = player1Canvas.getContext('2d');
+
+  const player2Canvas = document.getElementById('player2-tetris');
+  const player2Score = document.getElementById('player2-score');
+  const player2Context = player2Canvas.getContext('2d');
 
   const clientId = async () => await GET(`${config.baseURL}:${PORT}/connect`);
 
   player1Context.scale(20, 20);
+  player2Context.scale(20, 20);
+
+  const player1 = {
+    id: clientId,
+    position: { x: 0, y: 0 },
+    matrix: null,
+    score: 0,
+  };
+
+  let player2 = {
+    id: '',
+    position: { x: 0, y: 0 },
+    matrix: null,
+    score: 0,
+  };
+
+  // 20 * 12 = 240 width
+  // 20 * 18 = 360 height
+  const player1Arena = createMatrix(12, 18);
+  const player2Arena = createMatrix(12, 18);
 
   const colors = [
     null,
@@ -20,9 +45,6 @@ function init() {
     'green',
     'red',
   ];
-  // 20 * 12 = 240 width
-  // 20 * 18 = 360 height
-  const arena = createMatrix(12, 18);
 
   const PIECES = {
     T: [
