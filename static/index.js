@@ -77,6 +77,9 @@ const delay = (ms) => {
     }, ms);
   });
 };
+
+const awaitingForSecondPlayer = async () => await GET(`${config.baseURL}:${config.backendPort}/players`);
+
 let singlePlayer = false;
 const pollForPlayers = async () => {
   while (!await awaitingForSecondPlayer()) {
