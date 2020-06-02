@@ -264,7 +264,7 @@ function init() {
       POST(`${config.baseURL}:${PORT}/data`, player).catch(console.log);
 
       // Request other player's object from server
-      const otherPlayerObject = GET(`${config.baseURL}:${PORT}/get-data`);
+      player2 = await GET(`${config.baseURL}:${PORT}/get-data`);
     }
     lastTime = time;
 
