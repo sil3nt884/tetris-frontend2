@@ -40,13 +40,15 @@ app.use('/', index);
 
 if (mode === 'prod') {
   https.createServer(
-      { key: fs.readFileSync(getConfig('app.key')), cert: getConfig('app.fullchain') }, app);
+      { key: fs.readFileSync(getConfig('app.key')), cert: getConfig('app.fullchain') }, app)
+      .listen(PORT);
 }
 
 if (mode === 'dev') {
-  console.log('starting dev env')
+  console.log('starting dev env');
   https.createServer(
-      { key: fs.readFileSync(getConfig('app.localKey')), cert: fs.readFileSync(getConfig('app.localFullChain')) }, app);
+      { key: fs.readFileSync(getConfig('app.localKey')), cert: fs.readFileSync(getConfig('app.localFullChain')) }, app)
+      .listen(PORT);
 }
 
-app.listen(PORT);
+
