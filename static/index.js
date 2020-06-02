@@ -90,7 +90,10 @@ let singlePlayer = false;
 const awaitingForSecondPlayer = async () => {
   let response = {};
   while (Object.keys(response).length === 0) {
-    response = await Promise.race( [GET(`${config.baseURL}:${config.backendPort}/players`), PromiseTimeout(1000)]);
+    const res = await Promise.race( [GET(`${config.baseURL}:${config.backendPort}/players`), PromiseTimeout(1000)]);
+    if (Object.keys(res).length > 0 ) {
+      response = { status: res.status };
+    }
     await delay(1000);
     console.log(count);
     if (count >=8) {
