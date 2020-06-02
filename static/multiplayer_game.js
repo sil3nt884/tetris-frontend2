@@ -273,7 +273,8 @@ function init() {
   }
 
   function updateScore() {
-    document.getElementById('player1-score').innerText = player.score;
+    player1Score.innerText = player1.score;
+    player2Score.innerText = player2.score;
   }
 
   document.addEventListener('keydown', (event) => {
