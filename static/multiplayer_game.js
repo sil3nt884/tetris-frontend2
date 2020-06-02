@@ -182,10 +182,10 @@ function init() {
   }
 
   function playerDrop() {
-    player.position.y++;
-    if (collide(arena, player)) {
-      player.position.y--;
-      merge(arena, player);
+    player1.position.y++;
+    if (collide(player1Arena, player1)) {
+      player1.position.y--;
+      merge(player1Arena, player1);
       playerReset();
       sweep();
       updateScore();
@@ -214,35 +214,35 @@ function init() {
   }
 
   function playerMove(direction) {
-    player.position.x += direction;
-    if (collide(arena, player)) {
-      player.position.x -= direction;
+    player1.position.x += direction;
+    if (collide(player1Arena, player1)) {
+      player1.position.x -= direction;
     }
   }
 
   function playerReset() {
     const pieces = 'TOISZLJ';
     const random = Math.floor(pieces.length * Math.random());
-    player.matrix = createPiece(pieces[random]);
-    player.position.y = 0;
-    player.position.x = Math.floor(arena[0].length / 2) - Math.floor(player.matrix[0].length / 2);
-    if (collide(arena, player)) {
-      arena.forEach((row) => row.fill(0));
-      player.score = 0;
+    player1.matrix = createPiece(pieces[random]);
+    player1.position.y = 0;
+    player1.position.x = Math.floor(player1Arena[0].length / 2) - Math.floor(player1.matrix[0].length / 2);
+    if (collide(player1Arena, player1)) {
+      player1Arena.forEach((row) => row.fill(0));
+      player1.score = 0;
       updateScore();
     }
   }
 
   function playerRotate(direction) {
-    const xPosition = player.position.x;
+    const xPosition = player1.position.x;
     let offset = 1;
-    rotate(player.matrix, direction);
-    while (collide(arena, player)) {
-      player.position.x += offset;
+    rotate(player1.matrix, direction);
+    while (collide(player1Arena, player1)) {
+      player1.position.x += offset;
       offset = -(offset + (offset > 0 ? 1 : -1));
-      if (offset > player.matrix[0].length) {
-        rotate(player.matrix, -direction);
-        player.position.x = xPosition;
+      if (offset > player1.matrix[0].length) {
+        rotate(player1.matrix, -direction);
+        player1.position.x = xPosition;
         return;
       }
     }
