@@ -5,8 +5,6 @@ const config = window.gameConfig;
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 
-GET(`${config.baseURL}:${PORT}/connect`);
-
 context.scale(20, 20);
 
 const colors = [
