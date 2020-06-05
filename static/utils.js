@@ -13,7 +13,7 @@ const fetch = (url, headers, method, body) => {
   }
 };
 
-export const GET = (url) => fetch(url, 'get');
+export const GET = async (url) => await fetch(url, 'get');
 
 export const POST = (url, body) => fetch(url, {
   'content-type': 'application/json',
