@@ -71,8 +71,8 @@ const startMuliplayerGame = () => {
 
 
 const PromiseTimeout = (ms) => {
-  return new Promise((resolve)=> {
-    setTimeout(()=>{
+  return new Promise((resolve) => {
+    setTimeout(() => {
       resolve('not connected');
     }, ms);
   });
@@ -80,9 +80,9 @@ const PromiseTimeout = (ms) => {
 
 
 const awaitingForSecondPlayer = async () => {
-  return new Promise((resolve)=> {
+  return new Promise((resolve) => {
     const source = new EventSource(`${config.baseURL}:${config.backendPort}/players`);
-    source.onmessage = function(event) {
+    source.onmessage = function (event) {
       if (event.data.includes('ok')) {
         resolve(event.data);
       }

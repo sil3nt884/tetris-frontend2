@@ -14,14 +14,14 @@ async function init() {
   const getData = () => {
     return new Promise((resolve) => {
       const source = new EventSource(`${config.baseURL}:${PORT}/get-data`);
-      source.onmessage = function(event) {
+      source.onmessage = function (event) {
         resolve(JSON.parse(event.data));
       };
     });
   };
 
   const clientId = async () => await GET(`${config.baseURL}:${PORT}/connect`).then((response) => response.text())
-      .then((data) => console.log(data));
+    .then((data) => console.log(data));
 
   player1Context.scale(20, 20);
   player2Context.scale(20, 20);
@@ -116,8 +116,8 @@ async function init() {
     for (let y = 0; y < m.length; ++y) {
       for (let x = 0; x < m[y].length; ++x) {
         if (m[y][x] !== 0 &&
-                (arena[y + o.y] &&
-                    arena[y + o.y][x + o.x]) !== 0) {
+          (arena[y + o.y] &&
+            arena[y + o.y][x + o.x]) !== 0) {
           return true;
         }
       }
@@ -210,9 +210,9 @@ async function init() {
           matrix[x][y],
           matrix[y][x],
         ] = [
-          matrix[y][x],
-          matrix[x][y],
-        ];
+            matrix[y][x],
+            matrix[x][y],
+          ];
       }
     }
 
