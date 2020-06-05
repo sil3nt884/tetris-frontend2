@@ -11,8 +11,8 @@ const fs = require('fs');
 
 global.environment = mode;
 
-app.use(logger((tokens, req, res)=>{
-  return JSON.stringify( {
+app.use(logger((tokens, req, res) => {
+  return JSON.stringify({
     method: tokens.method(req, res),
     url: tokens.url(req, res),
     qs: req.query,
@@ -39,16 +39,12 @@ const index = require('./routes/index');
 app.use('/', index);
 
 if (mode === 'prod') {
-  https.createServer(
-      { key: fs.readFileSync(getConfig('app.key')), cert: getConfig('app.fullchain') }, app)
-      .listen(PORT);
+  https.createServer({ key: fs.readFileSync(getConfig('app.key')), cert: getConfig('app.fullchain') }, app).listen(PORT);
 }
 
 if (mode === 'dev') {
   console.log('starting dev env');
-  https.createServer(
-      { key: fs.readFileSync(getConfig('app.localKey')), cert: fs.readFileSync(getConfig('app.localFullChain')) }, app)
-      .listen(PORT);
+  https.createServer({ key: fs.readFileSync(getConfig('app.localKey')), cert: fs.readFileSync(getConfig('app.localFullChain')) }, app).listen(PORT);
 }
 
 
