@@ -88,7 +88,6 @@ const awaitingForSecondPlayer = async () => {
   });
 };
 
-
 const start = async () => {
   const connected = await GET(`${config.baseURL}:${config.backendPort}/connect`);
   if (connected) {
