@@ -93,7 +93,7 @@ const start = async () => {
   if (connected) {
     const results = await Promise.race([awaitingForSecondPlayer(), await PromiseTimeout(config.mulitiPlayerTimeout)]);
     if (results.includes('ok')) {
-      startMuliplayerGame();
+      startMultiplayerGame();
     } else {
       startSingleplayerGame();
     }
