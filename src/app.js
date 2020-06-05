@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const mode = process.env.mode || 'dev';
-const https = require('https');
+const https = require('spdy');
 const fs = require('fs');
 
 global.environment = mode;
