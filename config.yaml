@@ -5,5 +5,5 @@ app:
   fullchain: "/etc/letsencrypt/live/points884.com/fullchain.pem"
   localKey: "cert/server.key"
   localFullChain: "cert/server.cert"
-  mulitiPlayerTimeout: 8
+  mulitiPlayerTimeout: 8000
   baseURL: "https://192.168.0.2"
