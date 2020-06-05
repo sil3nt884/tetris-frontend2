@@ -80,10 +80,12 @@ const PromiseTimeout = (ms) => {
 
 
 const awaitingForSecondPlayer = async () => {
-  return new Promise(()=> {
-    const source = new EventSource('/Players');
-    source.onmessage = function(data) {
-      resolve(data);
+  return new Promise((resolve)=> {
+    const source = new EventSource(`${config.baseURL}:${config.backendPort}/players`);
+    source.onmessage = function(event) {
+      if (event.data.includes('ok')) {
+        resolve(event.data);
+      }
     };
   });
 };
@@ -91,8 +93,8 @@ const awaitingForSecondPlayer = async () => {
 const start = async () => {
   const connected = await GET(`${config.baseURL}:${config.backendPort}/connect`);
   if (connected) {
-    const results = await Promise.race([awaitingForSecondPlayer, PromiseTimeout(config.mulitiPlayerTimeout)]);
-    if (results === 'ok') {
+    const results = await Promise.race([awaitingForSecondPlayer(), await PromiseTimeout(config.mulitiPlayerTimeout)]);
+    if (results.includes('ok')) {
       startMuliplayerGame();
     } else {
       startSingleplayerGame();
