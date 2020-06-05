@@ -69,47 +69,31 @@ const startMuliplayerGame = () => {
   document.body.append(gameScript);
 };
 
-let count = 1;
-const delay = (ms) => {
-  return new Promise((resolve) => {
-    setTimeout(()=> {
-      resolve();
-    }, ms);
-  });
-};
 
 const PromiseTimeout = (ms) => {
   return new Promise((resolve)=> {
     setTimeout(()=>{
-      resolve({});
+      resolve('not connected');
     }, ms);
   });
 };
 
-let singlePlayer = false;
+
 const awaitingForSecondPlayer = async () => {
-  let response = {};
-  while (Object.keys(response).length === 0) {
-    const res = await Promise.race( [GET(`${config.baseURL}:${config.backendPort}/players`), PromiseTimeout(1000)]);
-    if (Object.keys(res).length > 0 ) {
-      response = { status: res.status };
-    }
-    await delay(1000);
-    console.log(count);
-    if (count >=8) {
-      singlePlayer = true;
-      break;
-    }
-    count++;
-  }
+  return new Promise(()=> {
+    const source = new EventSource('/Players');
+    source.onmessage = function(data) {
+      resolve(data);
+    };
+  });
 };
 
 
 const start = async () => {
   const connected = await GET(`${config.baseURL}:${config.backendPort}/connect`);
   if (connected) {
-    await awaitingForSecondPlayer();
-    if (!singlePlayer) {
+    const results = await Promise.race([awaitingForSecondPlayer, PromiseTimeout(config.mulitiPlayerTimeout)]);
+    if (results === 'ok') {
       startMuliplayerGame();
     } else {
       startSingleplayerGame();
@@ -117,4 +101,4 @@ const start = async () => {
   }
 };
 
-start();
+start().catch(console.log);
