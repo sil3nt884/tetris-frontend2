@@ -25,6 +25,10 @@ async function init() {
 
   player1Context.scale(20, 20);
   player2Context.scale(20, 20);
+  const playerId = await clientId();
+
+
+
 
   const player1 = {
     id: playerId,
