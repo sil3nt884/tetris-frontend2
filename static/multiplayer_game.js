@@ -2,7 +2,7 @@ import { GET, POST } from './utils.js';
 const PORT = window.gameConfig.backendPort;
 const config = window.gameConfig;
 
-function init() {
+async function init() {
   const player1Canvas = document.getElementById('player1-tetris');
   const player1Score = document.getElementById('player1-score');
   const player1Context = player1Canvas.getContext('2d');
@@ -11,24 +11,30 @@ function init() {
   const player2Score = document.getElementById('player2-score');
   const player2Context = player2Canvas.getContext('2d');
 
-  const clientId = async () => await GET(`${config.baseURL}:${PORT}/connect`);
+  const getData = () => {
+    return new Promise((resolve) => {
+      const source = new EventSource(`${config.baseURL}:${PORT}/get-data`);
+      source.onmessage = function(event) {
+        resolve(JSON.parse(event.data));
+      };
+    });
+  };
+
+  const clientId = async () => await GET(`${config.baseURL}:${PORT}/connect`).then((response) => response.text())
+      .then((data) => console.log(data));
 
   player1Context.scale(20, 20);
   player2Context.scale(20, 20);
 
   const player1 = {
-    id: clientId,
+    id: playerId,
     position: { x: 0, y: 0 },
     matrix: null,
     score: 0,
   };
+  POST(`${config.baseURL}:${PORT}/data`, player1).catch(console.log);
 
-  let player2 = {
-    id: '',
-    position: { x: 0, y: 0 },
-    matrix: null,
-    score: 0,
-  };
+  let player2 = await getData();
 
   // 20 * 12 = 240 width
   // 20 * 18 = 360 height
@@ -261,10 +267,10 @@ function init() {
       playerDrop();
 
       // Send player object to server
-      POST(`${config.baseURL}:${PORT}/data`, player).catch(console.log);
+      POST(`${config.baseURL}:${PORT}/data`, player1).catch(console.log);
 
       // Request other player's object from server
-      player2 = await GET(`${config.baseURL}:${PORT}/get-data`);
+      player2 = await getData();
     }
     lastTime = time;
 
