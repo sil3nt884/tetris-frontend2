@@ -21,7 +21,7 @@ const startSingleplayerGame = () => {
   document.body.append(score, canvas, gameScript);
 };
 
-const startMuliplayerGame = () => {
+const startMultiplayerGame = () => {
   const connection = document.getElementById('connection');
   connection.style.display = 'none';
 
@@ -69,7 +69,6 @@ const startMuliplayerGame = () => {
   document.body.append(gameScript);
 };
 
-
 const PromiseTimeout = (ms) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -78,11 +77,10 @@ const PromiseTimeout = (ms) => {
   });
 };
 
-
 const awaitingForSecondPlayer = async () => {
   return new Promise((resolve) => {
     const source = new EventSource(`${config.baseURL}:${config.backendPort}/players`);
-    source.onmessage = function (event) {
+    source.onmessage = function(event) {
       if (event.data.includes('ok')) {
         resolve(event.data);
       }
