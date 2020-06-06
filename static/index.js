@@ -1,10 +1,4 @@
-import { GET } from './utils.js';
-const config = window.gameConfig;
-
 const startSingleplayerGame = () => {
-  const connection = document.getElementById('connection');
-  connection.style.display = 'none';
-
   const score = document.createElement('div');
   score.id = 'score';
   score.textContent = 'Score: ';
@@ -22,9 +16,6 @@ const startSingleplayerGame = () => {
 };
 
 const startMultiplayerGame = () => {
-  const connection = document.getElementById('connection');
-  connection.style.display = 'none';
-
   // Player 1
   const player1Div = document.createElement('div');
   player1Div.id = 'player1-container';
@@ -69,35 +60,30 @@ const startMultiplayerGame = () => {
   document.body.append(gameScript);
 };
 
-const PromiseTimeout = (ms) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve('not connected');
-    }, ms);
-  });
-};
+const startScreen = () => {
+  const startScreenDiv = document.getElementById('start_screen');
 
-const awaitingForSecondPlayer = async () => {
-  return new Promise((resolve) => {
-    const source = new EventSource(`${config.baseURL}:${config.backendPort}/players`);
-    source.onmessage = function(event) {
-      if (event.data.includes('ok')) {
-        resolve(event.data);
-      }
-    };
+  const startSingleplayerButton = document.getElementById('start_singleplayer');
+  startSingleplayerButton.addEventListener('click', () => {
+    startScreenDiv.style.display = 'none';
+    startSingleplayerGame();
+  });
+
+  const startMultiplayerButton = document.getElementById('start_multiplayer');
+  startMultiplayerButton.addEventListener('click', () => {
+    startScreenDiv.style.display = 'none';
+    startMultiplayerGame();
+  });
+
+  const joinMultiplayerButton = document.getElementById('join_multiplayer');
+  joinMultiplayerButton.addEventListener('click', () => {
+    startScreenDiv.style.display = 'none';
+    startMultiplayerGame();
   });
 };
 
 const start = async () => {
-  const connected = await GET(`${config.baseURL}:${config.backendPort}/connect`);
-  if (connected) {
-    const results = await Promise.race([awaitingForSecondPlayer(), await PromiseTimeout(config.mulitiPlayerTimeout)]);
-    if (results.includes('ok')) {
-      startMultiplayerGame();
-    } else {
-      startSingleplayerGame();
-    }
-  }
+  startScreen();
 };
 
-start().catch(console.log);
+start();
