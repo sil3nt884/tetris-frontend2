@@ -174,13 +174,27 @@ async function init(player1, player2) {
     });
   }
 
+  function drawOtherPlayerMatrix(matrix, offset) {
+    matrix.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value !== 0) {
+          player2Context.fillStyle = colors[value];
+          player2Context.fillRect(x + offset.x, y + offset.y, 1, 1);
+        }
+      });
+    });
+  }
+
   function draw() {
     player1Context.fillStyle = '#000';
     player1Context.fillRect(0, 0, player1Canvas.width, player1Canvas.height);
     drawMatrix(player1Arena, { x: 0, y: 0 });
     drawMatrix(player1.matrix, player1.position);
-    drawMatrix(player2Arena, { x: 0, y: 0 });
-    drawMatrix(player2.matrix, player2.position);
+
+    player2Context.fillStyle = '#000';
+    player2Context.fillRect(0, 0, player2Canvas.width, player2Canvas.height);
+    drawOtherPlayerMatrix(player2Arena, { x: 0, y: 0 });
+    drawOtherPlayerMatrix(player2.matrix, player2.position);
   }
 
   function merge(arena, player) {
