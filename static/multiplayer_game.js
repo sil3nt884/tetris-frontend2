@@ -22,25 +22,8 @@ async function init(player1, player2) {
   const player2Score = document.getElementById('player2-score');
   const player2Context = player2Canvas.getContext('2d');
 
-  const clientId = async () => await GET(`${config.baseURL}:${PORT}/connect`).then((response) => response.text())
-    .then((data) => console.log(data));
-
   player1Context.scale(20, 20);
   player2Context.scale(20, 20);
-  const playerId = await clientId();
-
-
-
-
-  const player1 = {
-    id: playerId,
-    position: { x: 0, y: 0 },
-    matrix: null,
-    score: 0,
-  };
-  POST(`${config.baseURL}:${PORT}/data`, player1).catch(console.log);
-
-  let player2 = await getData();
 
   // 20 * 12 = 240 width
   // 20 * 18 = 360 height
@@ -329,7 +312,72 @@ async function init(player1, player2) {
   update();
 };
 
-window.onload = init();
+
+const startGame = async () => {
+  console.log('startGame HAS BEEN CALLED');
+  const PromiseTimeout = (ms) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve('not connected');
+      }, ms);
+    });
+  };
+
+  const awaitingForSecondPlayer = async () => {
+    return new Promise((resolve) => {
+      const source = new EventSource(`${config.baseURL}:${config.backendPort}/players`);
+      source.onmessage = function(event) {
+        if (event.data.includes('ok')) {
+          console.log('AWAITING SECOND PLAYER');
+          resolve(event.data);
+        }
+      };
+    });
+  };
+
+  const clientId = async () => await GET(`${config.baseURL}:${PORT}/connect`).then((response) => response.text());
+
+  const playerId = await clientId();
+  console.log('playerId: ', playerId);
+
+  const player1 = {
+    id: playerId,
+    position: { x: 0, y: 0 },
+    matrix: null,
+    score: 0,
+  };
+
+  console.log('Player 1: ', player1);
+
+  // Init empty player2 object
+  let player2 = {};
+
+  const results = await Promise.race([awaitingForSecondPlayer(), PromiseTimeout(config.mulitiPlayerTimeout)]);
+
+  console.log('results', results);
+
+  if (results.includes('ok')) {
+    // Sending my player 1 object to server
+    await POST(`${config.baseURL}:${PORT}/data`, player1).catch(console.log);
+
+    const getDataResults = await Promise.race([getData(), PromiseTimeout(config.mulitiPlayerTimeout)]);
+
+    if (getDataResults !== null) {
+      player2 = await getData();
+      console.log('GET DATA HAS RESOLVED');
+      console.log('Player 2: ', player2);
+    } else {
+      window.location = '/';
+      alert('Could not get player 2 object from /get-data request');
+    }
+  } else {
+    window.location = '/';
+    alert('Could not connect to player 2');
+  }
+  init(player1, player2);
+};
+
+startGame();
 
 // Tetris tutorial
 // https://www.youtube.com/watch?v=H2aW5V46khA
