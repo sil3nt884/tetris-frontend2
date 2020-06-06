@@ -2,7 +2,18 @@ import { GET, POST } from './utils.js';
 const PORT = window.gameConfig.backendPort;
 const config = window.gameConfig;
 
-async function init() {
+const getData = () => {
+  return new Promise((resolve) => {
+    const source = new EventSource(`${config.baseURL}:${PORT}/get-data`);
+    source.onmessage = function(event) {
+      resolve(JSON.parse(event.data));
+    };
+  });
+};
+
+async function init(player1, player2) {
+  console.log('INIT CALLED');
+
   const player1Canvas = document.getElementById('player1-tetris');
   const player1Score = document.getElementById('player1-score');
   const player1Context = player1Canvas.getContext('2d');
@@ -10,15 +21,6 @@ async function init() {
   const player2Canvas = document.getElementById('player2-tetris');
   const player2Score = document.getElementById('player2-score');
   const player2Context = player2Canvas.getContext('2d');
-
-  const getData = () => {
-    return new Promise((resolve) => {
-      const source = new EventSource(`${config.baseURL}:${PORT}/get-data`);
-      source.onmessage = function (event) {
-        resolve(JSON.parse(event.data));
-      };
-    });
-  };
 
   const clientId = async () => await GET(`${config.baseURL}:${PORT}/connect`).then((response) => response.text())
     .then((data) => console.log(data));
