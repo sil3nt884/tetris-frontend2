@@ -1,10 +1,10 @@
 ### Multiplayer requirements:
 
-- Player 1 clicks on **"Starts multiplayer game"**, once started it will perform a **GET** request on **"/connect"** endpoint to get clientid back from the server
+- Player 1 clicks on **"Starts multiplayer game"**, once started it will perform a **GET** request on **"/connect"** endpoint to get clientid back from the server **[DONE]**
 
-- Server receives the **GET** request, generates the clientid and sends it back to player 1
+- Server receives the **GET** request, generates the clientid and sends it back to player 1 **[DONE]**
 
-- Player 1 assigns the player.id to id from the response from **"/connect"** endpoint
+- Player 1 assigns the player.id to id from the response from **"/connect"** endpoint **[DONE]**
 
 - Player 1 wait for a timeout of 1 minute, if the timeout of 1 minute has been reached. The frontend will show error, **"Second player did not connect"**
 
