@@ -52,7 +52,7 @@ const startMultiplayerGame = () => {
 
   const gameScript = document.createElement('script');
   gameScript.id = 'game-script';
-  gameScript.src = './static/multiplayer_game.js';
+  gameScript.src = './static/multiplayer_game_v2.js';
   gameScript.type = 'module';
 
   document.body.append(player1Div);
