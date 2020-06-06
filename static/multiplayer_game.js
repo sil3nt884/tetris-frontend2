@@ -226,9 +226,9 @@ async function init(player1, player2) {
           matrix[x][y],
           matrix[y][x],
         ] = [
-            matrix[y][x],
-            matrix[x][y],
-          ];
+          matrix[y][x],
+          matrix[x][y],
+        ];
       }
     }
 
