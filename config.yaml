@@ -3,5 +3,7 @@ app:
   frontendPort: 8001
   key: "/etc/letsencrypt/live/points884.com/privkey.pem"
   fullchain: "/etc/letsencrypt/live/points884.com/fullchain.pem"
-  localKey: "cert/key.pem"
-  localFullChain: "cert/cert.pem"
+  localKey: "cert/server.key"
+  localFullChain: "cert/server.cert"
+  mulitiPlayerTimeout: 8000
+  baseURL: "https://192.168.0.2"
